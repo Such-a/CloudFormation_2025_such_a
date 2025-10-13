@@ -1,5 +1,5 @@
 # CloudFormation_2025_such_a
-
+task1:
 Create a CloudFormation template in YAML or JSON format.
 In the template, specify the S3 bucket resource that will host the website.
 
@@ -11,3 +11,5 @@ In the CloudFormation template, specify the BucketPolicy.
 
 Create, retrieve, or generate a simple static website (for example, with HTML, CSS, and JavaScript files).
 Using the AWS Management Console or the AWS CLI, upload your website files to the S3 bucket.
+ 
+task2:
