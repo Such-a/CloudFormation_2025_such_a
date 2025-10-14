@@ -24,3 +24,5 @@ ${LogBucketNamePrefix}-my-logs-unique-id.
 Define the EC2 instance resource ImageId: Use the Ref function with the AmiID parameter value.
 InstanceType: Use the Ref function to define the InstanceType parameter value.
 UserData: Use the Fn::Base64 and Fn::Sub functions to define user data A script that will run commands, for example, yum update -y, the bash script should write a S3ket with the same name LOG_BUCKET=${WebServerLogBucketnV}$App_ENV=}$APP_EN System variables.
+
+task2.yaml is for aws learner lab, because IAM is not supported, and task2-1.yaml is for personal aws account.
