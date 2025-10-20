@@ -2,7 +2,7 @@
 AWSTemplateFormatVersion: "2010-09-09"
 Transform: AWS::LanguageExtensions
 Description: >
-  Aurora musql Database Stack with Secrets Manager integration.
+  Aurora mysql Database Stack with Secrets Manager integration.
   Automatically creates secrets depending on the environment.
 
 Parameters:
