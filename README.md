@@ -64,3 +64,38 @@ For AWS::S3::Bucket resources:
 If the PublicAccessBlockConfiguration Property exists and one of its parameters (for example, BlockPublicAcls) is false, then a Tag named PublicAccessAllowed with a value of true is required.
 
 Customize your .cfnlintrc with cfn-lint to make your custom rule as customizable as possible. 
+
+
+
+📌##################################### 🚀task6 ############################## 📌
+
+Your company needs to automatically create two types of environments (for example, "test" and "production") using CloudFormation. Each environment may or may not have its own S3 Bucket for logging. Additionally, if an S3 Bucket is created, it must have a Bucket Policy set on it.
+
+Create a CloudFormation template that accepts the following Parameters:
+
+EnvironmentType (Type: String): Valid values: test or production. This parameter specifies which type of environment is being created.
+CreateLoggingBucket (Type: String): Valid values: true or false. This parameter specifies whether to create an S3 Bucket for logging.
+
+Use the Conditions section:
+Create a condition called ShouldCreateLoggingBucketCondition that will be true if the value of the CreateLoggingBucket parameter is true.
+Create a condition called IsProductionEnvironmentCondition that will be true if the value of the EnvironmentType parameter is production.
+
+Create the following Resources:
+
+S3 Bucket for Logging (AWS::S3::Bucket):
+This resource should only be created if the ShouldCreateLoggingBucketCondition condition is true.
+
+The Bucket Name (BucketName) should include the environment type (e.g., test-logs-your-unique-id or prod-logs-your-unique-id). You can do this by using the Fn::Join or Fn::Sub functions with the EnvironmentType parameter and AWS::AccountId for uniqueness.
+S3 Bucket Policy (AWS::S3::BucketPolicy):
+
+This resource should only be created if the S3 Bucket for Logging has been created (i.e., the ShouldCreateLoggingBucketCondition condition is true).
+The policy should grant s3:GetObject permission on this Bucket.
+Important: Creating an S3 Bucket Policy must be dependent on creating an S3 Bucket. Use the DependsOn attribute to ensure that the Bucket Policy is created only after the Bucket is successfully created.
+
+EC2 Instance (AWS::EC2::Instance) (conditional):
+This resource should only be created if the IsProductionEnvironmentCondition condition is true.
+Use a test ImageId (for example, the Amazon Linux 2 AMI ID appropriate for the region) and InstanceType (for example, t2.micro).
+
+Use Outputs:
+If the S3 Bucket was created, output the LoggingBucketName (the name of the S3 Bucket).
+If the EC2 Instance was created, output the ProductionInstanceId (the ID of the EC2 Instance).
