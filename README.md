@@ -73,16 +73,16 @@ Your company needs to automatically create two types of environments (for exampl
 
 Create a CloudFormation template that accepts the following Parameters:
 
-EnvironmentType (Type: String): Valid values: test or production. This parameter specifies which type of environment is being created.
+🔖 EnvironmentType (Type: String): Valid values: test or production. This parameter specifies which type of environment is being created.
 CreateLoggingBucket (Type: String): Valid values: true or false. This parameter specifies whether to create an S3 Bucket for logging.
 
-Use the Conditions section:
+🔖 Use the Conditions section:
 Create a condition called ShouldCreateLoggingBucketCondition that will be true if the value of the CreateLoggingBucket parameter is true.
 Create a condition called IsProductionEnvironmentCondition that will be true if the value of the EnvironmentType parameter is production.
 
 Create the following Resources:
 
-S3 Bucket for Logging (AWS::S3::Bucket):
+🔖 S3 Bucket for Logging (AWS::S3::Bucket):
 This resource should only be created if the ShouldCreateLoggingBucketCondition condition is true.
 
 The Bucket Name (BucketName) should include the environment type (e.g., test-logs-your-unique-id or prod-logs-your-unique-id). You can do this by using the Fn::Join or Fn::Sub functions with the EnvironmentType parameter and AWS::AccountId for uniqueness.
@@ -92,10 +92,65 @@ This resource should only be created if the S3 Bucket for Logging has been creat
 The policy should grant s3:GetObject permission on this Bucket.
 Important: Creating an S3 Bucket Policy must be dependent on creating an S3 Bucket. Use the DependsOn attribute to ensure that the Bucket Policy is created only after the Bucket is successfully created.
 
-EC2 Instance (AWS::EC2::Instance) (conditional):
+🔖 EC2 Instance (AWS::EC2::Instance) (conditional):
 This resource should only be created if the IsProductionEnvironmentCondition condition is true.
 Use a test ImageId (for example, the Amazon Linux 2 AMI ID appropriate for the region) and InstanceType (for example, t2.micro).
 
-Use Outputs:
+🔖 Use Outputs:
 If the S3 Bucket was created, output the LoggingBucketName (the name of the S3 Bucket).
 If the EC2 Instance was created, output the ProductionInstanceId (the ID of the EC2 Instance).
+
+
+
+📌##################################### 🚀task7 ############################## 📌
+
+The deployment consists of four nested stacks:
+
+🔖 VPC Stack (vpc.yaml)
+
+Creates a VPC with two public subnets across different Availability Zones.
+Includes Internet Gateway and route tables for public connectivity.
+Outputs the VPC ID and subnet IDs for downstream stacks.
+
+🔖 EC2 Stack (ec2.yaml)
+
+Launches a web server EC2 instance in the first public subnet.
+Installs Apache and PHP via cfn-init.
+Displays instance metadata and outputs on the browser, including:
+EC2 Instance ID
+Availability Zone
+AMI ID
+RDS Table Name
+SNS Topic Name
+Associates an Elastic IP for public access.
+
+🔖 RDS Stack (rds.yaml)
+
+Creates a MySQL RDS instance with a security group and DB subnet group.
+Uses two public subnets from the VPC stack.
+Outputs the database endpoint and table name (testdb).
+
+🔖 SNS Stack (sns.yaml)
+
+Creates an SNS topic per environment (Dev, Test, Prod).
+Outputs the topic name and ARN for integration with EC2.
+
+🔖 Root Stack (main.yaml)
+
+Orchestrates all nested stacks and passes outputs to EC2.
+Ensures that the EC2 instance can dynamically display:
+RDS table name
+SNS topic name
+Deploys all resources in the correct order.
+Deployment Outcome
+After the CloudFormation deployment completes:
+Access the web server using its public IP.
+
+
+🔖 The page will display:
+
+EC2 Instance ID: i-0abc123def
+Availability Zone: eu-central-1a
+AMI ID: ami-123abc456
+RDS Table Name: testdb
+SNS Topic Name: Test-NotificationsTopic
