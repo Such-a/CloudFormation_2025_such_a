@@ -154,3 +154,8 @@ Availability Zone: eu-central-1a
 AMI ID: ami-123abc456
 RDS Table Name: testdb
 SNS Topic Name: Test-NotificationsTopic
+
+
+📌##################################### 🚀task8 ############################## 📌
+
+We had vpc and EC2 cross-stacks and I added The rds stack, which will also a cross-stack and ultimately determines the name of the rds table that should appear when going to the ec2 endpoint.
