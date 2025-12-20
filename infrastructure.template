@@ -1,0 +1,24 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Description: AWS CloudFormation - Package and deploy.
+
+Parameters:
+  LambdaExecutionRoleArn:
+    Type: String
+    Description: ARN of an existing IAM role for Lambda basic execution
+
+Resources:
+  PythonFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: cfn-python-function
+      Description: Python Function to return specific TimeZone time
+      Runtime: python3.12
+      Role: !Ref LambdaExecutionRoleArn
+      Handler: lambda_function.handler
+      Code: lambda/
+
+Outputs:
+  LambdaFunction:
+    Description: AWS Lambda Python Function
+    Value: !Ref PythonFunction
