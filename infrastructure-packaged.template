@@ -1,0 +1,61 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Lambda to process images from S3 and save results to DynamoDB using existing
+  IAM role
+Parameters:
+  LambdaExecutionRoleArn:
+    Type: String
+    Description: Existing IAM Role ARN for Lambda
+  S3BucketName:
+    Type: String
+    Description: S3 bucket where Lambda zip package is stored
+  HuggingFaceApiToken:
+    Type: String
+    Description: Huggingface API token
+  DynamoDBTableName:
+    Type: String
+    Default: your-dynamo-db
+    Description: DynamoDB table to store results
+Resources:
+  ImageProcessingLambda:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: ImageProcessingLambda
+      Handler: lambda_function.lambda_handler
+      Runtime: python3.12
+      Role:
+        Ref: LambdaExecutionRoleArn
+      Code:
+        S3Bucket:
+          Ref: S3BucketName
+        S3Key: my-python-lambda-stack20/16d0cc4cbacb41dbf20bb08bdfe237ca
+      Timeout: 30
+      MemorySize: 512
+      Environment:
+        Variables:
+          API_TOKEN:
+            Ref: HuggingFaceApiToken
+          DYNAMODB_TABLE:
+            Ref: DynamoDBTableName
+  DynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName:
+        Ref: DynamoDBTableName
+      AttributeDefinitions:
+      - AttributeName: id
+        AttributeType: S
+      KeySchema:
+      - AttributeName: id
+        KeyType: HASH
+      BillingMode: PAY_PER_REQUEST
+  LambdaS3Permission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName:
+        Fn::GetAtt:
+        - ImageProcessingLambda
+        - Arn
+      Action: lambda:InvokeFunction
+      Principal: s3.amazonaws.com
+      SourceArn:
+        Fn::Sub: arn:aws:s3:::example-bucket-name-gogita
