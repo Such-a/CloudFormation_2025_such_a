@@ -1,10 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Mission</title>
+  <meta charset="UTF-8">
+  <title>Serverless Dashboard</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>mission accomplished</h1>
+
+  <header>
+    <h1>🚀 Serverless Web Dashboard</h1>
+    <p>S3 + API Gateway + Lambda + RDS</p>
+  </header>
+
+  <main>
+    <button id="callApiBtn">Call Backend</button>
+
+    <div id="loader" class="hidden">⏳ Loading...</div>
+
+    <div id="result" class="card hidden">
+      <h2>Backend Response</h2>
+      <p><strong>Status:</strong> <span id="status"></span></p>
+      <p><strong>Message:</strong> <span id="message"></span></p>
+      <p><strong>Server Time:</strong> <span id="time"></span></p>
+      <p><strong>Request ID:</strong> <span id="requestId"></span></p>
+      <p><strong>Random Value:</strong> <span id="random"></span></p>
+      <p><strong>Request Count:</strong> <span id="count"></span></p>
+    </div>
+
+    <div id="error" class="error hidden"></div>
+  </main>
+
+  <script src="app.js"></script>
 </body>
 </html>
