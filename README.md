@@ -159,3 +159,8 @@ SNS Topic Name: Test-NotificationsTopic
 📌##################################### 🚀task8 ############################## 📌
 
 We had vpc and EC2 cross-stacks and I added The rds stack, which will also a cross-stack and ultimately determines the name of the rds table that should appear when going to the ec2 endpoint.
+
+
+📌##################################### 🚀task10 ############################## 📌
+
+A company needs to create a messaging system (SNS Topics) for N departments: Marketing, Sales, and Engineering. Your task is to create a CloudFormation template that will do this automatically and make it easy to add new departments in the future.
