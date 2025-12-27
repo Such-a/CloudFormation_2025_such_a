@@ -1,0 +1,37 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: SNS Topics for company departments (scalable & reusable)
+
+Transform: AWS::LanguageExtensions
+
+Parameters:
+  Departments:
+    Type: CommaDelimitedList
+    Default: Marketing,Sales,Engineering
+    Description: List of departments to create SNS topics for
+
+AWSTemplateFormatVersion: '2010-09-09'
+Description: SNS Topics per department using LanguageExtensions
+
+Transform:
+  - AWS::LanguageExtensions
+
+Parameters:
+  Departments:
+    Type: CommaDelimitedList
+    Default: Marketing,Sales,Engineering,HR
+    Description: Department names
+
+Resources:
+  Fn::ForEach::DepartmentLoop:
+    - Department
+    - !Ref Departments
+    - SNS${Department}Topic:
+        Type: AWS::SNS::Topic
+        Properties:
+          TopicName: !Sub company-${Department}-notifications
+          DisplayName: !Sub "${Department} Notifications"
+
+Outputs:
+  TopicNames:
+    Description: SNS Topic names created for departments
+    Value: !Join [ ", ", !Ref Departments ]
